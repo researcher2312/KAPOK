@@ -29,6 +29,7 @@ extern "C" {
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f4xx_hal.h"
+#include "stm32f4xx_hal.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -49,8 +50,6 @@ extern "C" {
 /* USER CODE BEGIN EM */
 
 /* USER CODE END EM */
-
-void HAL_TIM_MspPostInit(TIM_HandleTypeDef *htim);
 
 /* Exported functions prototypes ---------------------------------------------*/
 void Error_Handler(void);
@@ -80,6 +79,8 @@ void Error_Handler(void);
 #define OTG_FS_PowerSwitchOn_GPIO_Port GPIOC
 #define PDM_OUT_Pin GPIO_PIN_3
 #define PDM_OUT_GPIO_Port GPIOC
+#define MOTOR2_PWM_Pin GPIO_PIN_1
+#define MOTOR2_PWM_GPIO_Port GPIOA
 #define I2S3_WS_Pin GPIO_PIN_4
 #define I2S3_WS_GPIO_Port GPIOA
 #define SPI1_SCK_Pin GPIO_PIN_5
@@ -88,6 +89,10 @@ void Error_Handler(void);
 #define SPI1_MISO_GPIO_Port GPIOA
 #define SPI1_MOSI_Pin GPIO_PIN_7
 #define SPI1_MOSI_GPIO_Port GPIOA
+#define MOTOR2_A_Pin GPIO_PIN_2
+#define MOTOR2_A_GPIO_Port GPIOB
+#define MOTOR2_B_Pin GPIO_PIN_7
+#define MOTOR2_B_GPIO_Port GPIOE
 #define CLK_IN_Pin GPIO_PIN_10
 #define CLK_IN_GPIO_Port GPIOB
 #define LD4_Pin GPIO_PIN_12
@@ -98,16 +103,16 @@ void Error_Handler(void);
 #define LD5_GPIO_Port GPIOD
 #define LD6_Pin GPIO_PIN_15
 #define LD6_GPIO_Port GPIOD
-#define Wheel_servo_Pin GPIO_PIN_6
-#define Wheel_servo_GPIO_Port GPIOC
+#define SERVO1_Pin GPIO_PIN_6
+#define SERVO1_GPIO_Port GPIOC
 #define I2S3_MCK_Pin GPIO_PIN_7
 #define I2S3_MCK_GPIO_Port GPIOC
 #define IR_Input_Pin GPIO_PIN_8
 #define IR_Input_GPIO_Port GPIOC
-#define Motor_dir_B_Pin GPIO_PIN_9
-#define Motor_dir_B_GPIO_Port GPIOC
-#define Motor_dir_A_Pin GPIO_PIN_8
-#define Motor_dir_A_GPIO_Port GPIOA
+#define MOTOR1_B_Pin GPIO_PIN_9
+#define MOTOR1_B_GPIO_Port GPIOC
+#define MOTOR1_A_Pin GPIO_PIN_8
+#define MOTOR1_A_GPIO_Port GPIOA
 #define VBUS_FS_Pin GPIO_PIN_9
 #define VBUS_FS_GPIO_Port GPIOA
 #define OTG_FS_ID_Pin GPIO_PIN_10
@@ -120,8 +125,8 @@ void Error_Handler(void);
 #define SWDIO_GPIO_Port GPIOA
 #define SWCLK_Pin GPIO_PIN_14
 #define SWCLK_GPIO_Port GPIOA
-#define Motor_PWM_Pin GPIO_PIN_15
-#define Motor_PWM_GPIO_Port GPIOA
+#define MOTOR1_PWM_Pin GPIO_PIN_15
+#define MOTOR1_PWM_GPIO_Port GPIOA
 #define I2S3_SCK_Pin GPIO_PIN_10
 #define I2S3_SCK_GPIO_Port GPIOC
 #define I2S3_SD_Pin GPIO_PIN_12
@@ -132,8 +137,8 @@ void Error_Handler(void);
 #define OTG_FS_OverCurrent_GPIO_Port GPIOD
 #define SWO_Pin GPIO_PIN_3
 #define SWO_GPIO_Port GPIOB
-#define Arm_servo_Pin GPIO_PIN_5
-#define Arm_servo_GPIO_Port GPIOB
+#define SERVO2_Pin GPIO_PIN_5
+#define SERVO2_GPIO_Port GPIOB
 #define Audio_SCL_Pin GPIO_PIN_6
 #define Audio_SCL_GPIO_Port GPIOB
 #define Audio_SDA_Pin GPIO_PIN_9
