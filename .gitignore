@@ -1,0 +1,5 @@
+.cproject
+.mxproject
+Debug/
+*.ld
+.settings/
