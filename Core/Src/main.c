@@ -26,6 +26,7 @@
 #include "tim.h"
 #include "usb_host.h"
 #include "gpio.h"
+#include "servo.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -108,6 +109,7 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+	 //set_ang(100,0);
     /* USER CODE END WHILE */
     MX_USB_HOST_Process();
 
