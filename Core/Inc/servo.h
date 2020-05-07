@@ -18,11 +18,13 @@
 /* konfiguracja timera do generowania PWM */
 #define TIM_NO htim2
 #define TIM_CH_NO TIM_CHANNEL_1
+//#define TIM_CH_NO2 TIM_CHANNEL_2
 
 /* zakresy katowe pracy serwomechanizmu */
 #define ANGLE_MIN 0
 #define ANGLE_MAX 1800
 /* zakres PWM */
+//Sprawdzic zakresy
 #define PWM_MIN 1100
 #define PWM_MAX 2050
 
