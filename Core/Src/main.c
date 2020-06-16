@@ -31,6 +31,8 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "NEC_Decode.h"
+#include "dc_motor.h"
+#include "servo.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -51,6 +53,13 @@
 
 /* USER CODE BEGIN PV */
 NEC nec;
+
+MOTOR_HandleTypeDef motor1;
+MOTOR_HandleTypeDef motor2;
+
+volatile uint8_t signal_flag = 0;
+volatile uint8_t signal_code;
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -64,19 +73,22 @@ void MX_USB_HOST_Process(void);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 void myNecDecodedCallback(uint16_t address, uint8_t cmd) {
-	printf("Adres: %d komenda: %d\r\n", address, cmd);
+//	printf("Adres: %d komenda: %d\r\n", address, cmd);
+	signal_code = cmd;
+	signal_flag = 1;
     HAL_Delay(10);
     NEC_Read(&nec);
 }
 
 void myNecErrorCallback() {
-    printf("Error\r\n");
+//    printf("Error\r\n");
     HAL_Delay(10);
     NEC_Read(&nec);
 }
 
 void myNecRepeatCallback() {
-    printf("Repeat\r\n");
+//    printf("Repeat\r\n");
+	signal_flag = 1;
     HAL_Delay(10);
     NEC_Read(&nec);
 }
@@ -95,7 +107,23 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim) {
 int main(void)
 {
   /* USER CODE BEGIN 1 */
+	uint8_t speed = 0, motor_flag = 0, steering_flag = 0, arm_flag = 0;;
+	uint16_t direction = 900, position = 0;
 
+
+	motor1.timer_pwm = &htim2;
+	motor1.channel_pwm = TIM_CHANNEL_1;
+	motor1.pin_a = MOTOR1_A_Pin;
+	motor1.GPIO_a = MOTOR1_A_GPIO_Port;
+	motor1.pin_b = MOTOR1_B_Pin;
+	motor1.GPIO_b = MOTOR1_B_GPIO_Port;
+
+	motor2.timer_pwm = &htim2;
+	motor2.channel_pwm = TIM_CHANNEL_2;
+	motor2.pin_a = MOTOR2_A_Pin;
+	motor2.GPIO_a = MOTOR2_A_GPIO_Port;
+	motor2.pin_b = MOTOR2_B_Pin;
+	motor2.GPIO_b = MOTOR2_B_GPIO_Port;
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -138,6 +166,9 @@ int main(void)
   nec.NEC_DecodedCallback = myNecDecodedCallback;
   nec.NEC_ErrorCallback = myNecErrorCallback;
   nec.NEC_RepeatCallback = myNecRepeatCallback;
+
+  MOTOR_Init(&motor1);
+  MOTOR_Init(&motor2);
 
   NEC_Read(&nec);
   /* USER CODE END 2 */

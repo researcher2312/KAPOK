@@ -9,7 +9,7 @@
 #define INC_NEC_DECODE_H_
 
 #include <stdint.h>
-#include "stm32f1xx_hal.h"
+#include "stm32f4xx_hal.h"
 
 typedef enum {
     NEC_NOT_EXTENDED, NEC_EXTENDED
