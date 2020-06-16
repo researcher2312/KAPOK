@@ -93,6 +93,8 @@ void Error_Handler(void);
 #define MOTOR2_A_GPIO_Port GPIOB
 #define MOTOR2_B_Pin GPIO_PIN_7
 #define MOTOR2_B_GPIO_Port GPIOE
+#define IR_Input_Pin GPIO_PIN_9
+#define IR_Input_GPIO_Port GPIOE
 #define CLK_IN_Pin GPIO_PIN_10
 #define CLK_IN_GPIO_Port GPIOB
 #define LD4_Pin GPIO_PIN_12
@@ -107,8 +109,6 @@ void Error_Handler(void);
 #define SERVO1_GPIO_Port GPIOC
 #define I2S3_MCK_Pin GPIO_PIN_7
 #define I2S3_MCK_GPIO_Port GPIOC
-#define IR_Input_Pin GPIO_PIN_8
-#define IR_Input_GPIO_Port GPIOC
 #define MOTOR1_B_Pin GPIO_PIN_9
 #define MOTOR1_B_GPIO_Port GPIOC
 #define MOTOR1_A_Pin GPIO_PIN_8

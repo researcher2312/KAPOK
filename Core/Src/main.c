@@ -20,17 +20,17 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "dma.h"
 #include "i2c.h"
 #include "i2s.h"
 #include "spi.h"
 #include "tim.h"
 #include "usb_host.h"
 #include "gpio.h"
-#include "servo.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "NEC_Decode.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -50,7 +50,7 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-
+NEC nec;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -63,7 +63,29 @@ void MX_USB_HOST_Process(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+void myNecDecodedCallback(uint16_t address, uint8_t cmd) {
+	printf("Adres: %d komenda: %d\r\n", address, cmd);
+    HAL_Delay(10);
+    NEC_Read(&nec);
+}
 
+void myNecErrorCallback() {
+    printf("Error\r\n");
+    HAL_Delay(10);
+    NEC_Read(&nec);
+}
+
+void myNecRepeatCallback() {
+    printf("Repeat\r\n");
+    HAL_Delay(10);
+    NEC_Read(&nec);
+}
+
+void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim) {
+    if (htim == &htim2) {
+        NEC_TIM_IC_CaptureCallback(&nec);
+    }
+}
 /* USER CODE END 0 */
 
 /**
@@ -94,6 +116,7 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
+  MX_DMA_Init();
   MX_I2C1_Init();
   MX_I2S2_Init();
   MX_I2S3_Init();
@@ -101,8 +124,22 @@ int main(void)
   MX_USB_HOST_Init();
   MX_TIM2_Init();
   MX_TIM3_Init();
+  MX_TIM1_Init();
   /* USER CODE BEGIN 2 */
+  nec.timerHandle = &htim2;
 
+  nec.timerChannel = TIM_CHANNEL_1;
+  nec.timerChannelActive = HAL_TIM_ACTIVE_CHANNEL_1;
+
+  nec.timingBitBoundary = 1680;
+  nec.timingAgcBoundary = 12500;
+  nec.type = NEC_EXTENDED;
+
+  nec.NEC_DecodedCallback = myNecDecodedCallback;
+  nec.NEC_ErrorCallback = myNecErrorCallback;
+  nec.NEC_RepeatCallback = myNecRepeatCallback;
+
+  NEC_Read(&nec);
   /* USER CODE END 2 */
 
   /* Infinite loop */
