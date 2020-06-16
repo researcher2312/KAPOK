@@ -182,6 +182,58 @@ int main(void)
     MX_USB_HOST_Process();
 
     /* USER CODE BEGIN 3 */
+    if (signal_flag == 1){
+    	signal_flag = 0;
+    	switch(signal_code){
+    	case 9:
+    		if(speed < 100){
+    			speed +=1;
+    			motor_flag = 1;
+    		}
+    		break;
+    	case 21:
+    		if (speed > 0){
+    			speed -= 1;
+    			motor_flag = 1;
+    		}
+    		break;
+    	case 64:
+    		if (direction > 0){
+    			direction -= 10;
+    			steering_flag = 1;
+    		}
+    		break;
+    	case 67:
+    		if (direction < 1800){
+    			direction +=10;
+    			steering_flag = 1;
+    		}
+    		break;
+    	case 68:
+    		if (position < 1800){
+    			position += 10;
+    			arm_flag = 1;
+    		}
+    		break;
+    	case 7:
+    		if (position > 0){
+    			position -= 10;
+    			arm_flag = 1;
+    		}
+    		break;
+    	}
+    }
+    if (motor_flag){
+    	motor_flag = 0;
+    	MOTOR_SetSpeed(&motor1, 1, speed);
+    	MOTOR_SetSpeed(&motor2, 1, speed);
+    }
+    if (steering_flag){
+    	steering_flag = 0;
+    }
+    if (arm_flag){
+    	arm_flag = 0;
+    }
   }
   /* USER CODE END 3 */
 }
