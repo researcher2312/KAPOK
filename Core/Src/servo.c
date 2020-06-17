@@ -13,7 +13,7 @@
  * ang - kat obrotu walu serwomechanizmu
  * mode - tryb obrotu zgodnie/przeciwnie do wskazowek zegara
  */
-void set_ang(uint16_t ang, uint8_t mode)
+void set_ang1(uint16_t ang, uint8_t mode)
 {
 	uint16_t val;
 

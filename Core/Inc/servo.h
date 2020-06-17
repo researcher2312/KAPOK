@@ -16,9 +16,9 @@
 
 
 /* konfiguracja timera do generowania PWM */
-#define TIM_NO htim2
+#define TIM_NO htim3
 #define TIM_CH_NO TIM_CHANNEL_1
-//#define TIM_CH_NO2 TIM_CHANNEL_2
+#define TIM_CH_NO2 TIM_CHANNEL_2
 
 /* zakresy katowe pracy serwomechanizmu */
 #define ANGLE_MIN 0
@@ -30,8 +30,8 @@
 
 #define STEP ((1000 * (PWM_MAX - PWM_MIN)) / (ANGLE_MAX - ANGLE_MIN))
 
-void set_ang(uint16_t ang, uint8_t mode);
-
+void set_ang1(uint16_t ang, uint8_t mode);
+void set_ang2(uint16_t ang, uint8_t mode);
 
 
 #endif /* INC_SERVO_H_ */

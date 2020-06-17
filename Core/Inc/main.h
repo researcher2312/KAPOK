@@ -79,8 +79,6 @@ void Error_Handler(void);
 #define OTG_FS_PowerSwitchOn_GPIO_Port GPIOC
 #define PDM_OUT_Pin GPIO_PIN_3
 #define PDM_OUT_GPIO_Port GPIOC
-#define MOTOR2_PWM_Pin GPIO_PIN_1
-#define MOTOR2_PWM_GPIO_Port GPIOA
 #define I2S3_WS_Pin GPIO_PIN_4
 #define I2S3_WS_GPIO_Port GPIOA
 #define SPI1_SCK_Pin GPIO_PIN_5
@@ -93,8 +91,6 @@ void Error_Handler(void);
 #define MOTOR2_A_GPIO_Port GPIOB
 #define MOTOR2_B_Pin GPIO_PIN_7
 #define MOTOR2_B_GPIO_Port GPIOE
-#define IR_Input_Pin GPIO_PIN_9
-#define IR_Input_GPIO_Port GPIOE
 #define CLK_IN_Pin GPIO_PIN_10
 #define CLK_IN_GPIO_Port GPIOB
 #define LD4_Pin GPIO_PIN_12
@@ -125,8 +121,8 @@ void Error_Handler(void);
 #define SWDIO_GPIO_Port GPIOA
 #define SWCLK_Pin GPIO_PIN_14
 #define SWCLK_GPIO_Port GPIOA
-#define MOTOR1_PWM_Pin GPIO_PIN_15
-#define MOTOR1_PWM_GPIO_Port GPIOA
+#define IR_INPUT_Pin GPIO_PIN_15
+#define IR_INPUT_GPIO_Port GPIOA
 #define I2S3_SCK_Pin GPIO_PIN_10
 #define I2S3_SCK_GPIO_Port GPIOC
 #define I2S3_SD_Pin GPIO_PIN_12
@@ -141,6 +137,10 @@ void Error_Handler(void);
 #define SERVO2_GPIO_Port GPIOB
 #define Audio_SCL_Pin GPIO_PIN_6
 #define Audio_SCL_GPIO_Port GPIOB
+#define MOTOR2_PWM_Pin GPIO_PIN_7
+#define MOTOR2_PWM_GPIO_Port GPIOB
+#define MOTOR1_PWM_Pin GPIO_PIN_8
+#define MOTOR1_PWM_GPIO_Port GPIOB
 #define Audio_SDA_Pin GPIO_PIN_9
 #define Audio_SDA_GPIO_Port GPIOB
 #define MEMS_INT2_Pin GPIO_PIN_1
