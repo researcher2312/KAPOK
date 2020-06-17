@@ -160,6 +160,7 @@ int main(void)
   nec.NEC_ErrorCallback = myNecErrorCallback;
   nec.NEC_RepeatCallback = myNecRepeatCallback;
 
+//Rozpoczecie PWM Timera 3
   HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_1);
   HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_2);
 
@@ -171,7 +172,10 @@ int main(void)
   MOTOR_SetSpeed(&motor1, 1, 20);
   MOTOR_SetSpeed(&motor2, 0, 20);
 
+//Ustawienie serwomotoru odpowiedzialnego skręcanie na pozycji uznawanej za zero
   set_ang2(900, 0);
+
+	
   /* USER CODE END 2 */
 
   /* Infinite loop */
