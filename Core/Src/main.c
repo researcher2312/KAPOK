@@ -70,7 +70,6 @@ void SystemClock_Config(void);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 void myNecDecodedCallback(uint16_t address, uint8_t cmd) {
-//	printf("Adres: %d komenda: %d\r\n", address, cmd);
 	signal_code = cmd;
 	signal_flag = 1;
     HAL_Delay(10);
@@ -78,13 +77,11 @@ void myNecDecodedCallback(uint16_t address, uint8_t cmd) {
 }
 
 void myNecErrorCallback() {
-//    printf("Error\r\n");
     HAL_Delay(10);
     NEC_Read(&nec);
 }
 
 void myNecRepeatCallback() {
-//    printf("Repeat\r\n");
 	signal_flag = 1;
     HAL_Delay(10);
     NEC_Read(&nec);
@@ -104,19 +101,19 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim) {
 int main(void)
 {
   /* USER CODE BEGIN 1 */
-	uint8_t speed = 0, motor_flag = 0, steering_flag = 0, arm_flag = 0;;
-	uint16_t direction = 900, position = 0;
+	uint8_t speed = 0, motor_flag = 0, steering_flag = 0;
+	uint16_t direction = 900;
 
 
-	motor1.timer_pwm = &htim2;
-	motor1.channel_pwm = TIM_CHANNEL_1;
+	motor1.timer_pwm = &htim4;
+	motor1.channel_pwm = TIM_CHANNEL_2;
 	motor1.pin_a = MOTOR1_A_Pin;
 	motor1.GPIO_a = MOTOR1_A_GPIO_Port;
 	motor1.pin_b = MOTOR1_B_Pin;
 	motor1.GPIO_b = MOTOR1_B_GPIO_Port;
 
-	motor2.timer_pwm = &htim2;
-	motor2.channel_pwm = TIM_CHANNEL_2;
+	motor2.timer_pwm = &htim4;
+	motor2.channel_pwm = TIM_CHANNEL_3;
 	motor2.pin_a = MOTOR2_A_Pin;
 	motor2.GPIO_a = MOTOR2_A_GPIO_Port;
 	motor2.pin_b = MOTOR2_B_Pin;
@@ -146,92 +143,98 @@ int main(void)
   MX_I2S2_Init();
   MX_I2S3_Init();
   MX_SPI1_Init();
-  MX_USB_HOST_Init();
   MX_TIM2_Init();
   MX_TIM3_Init();
-  MX_TIM1_Init();
+  MX_TIM4_Init();
   /* USER CODE BEGIN 2 */
   nec.timerHandle = &htim2;
 
   nec.timerChannel = TIM_CHANNEL_1;
   nec.timerChannelActive = HAL_TIM_ACTIVE_CHANNEL_1;
 
-  nec.timingBitBoundary = 1680;
+  nec.timingBitBoundary = 3000;
   nec.timingAgcBoundary = 12500;
-  nec.type = NEC_EXTENDED;
+  nec.type = NEC_NOT_EXTENDED;
 
   nec.NEC_DecodedCallback = myNecDecodedCallback;
   nec.NEC_ErrorCallback = myNecErrorCallback;
   nec.NEC_RepeatCallback = myNecRepeatCallback;
 
+  HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_1);
+  HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_2);
+
   MOTOR_Init(&motor1);
   MOTOR_Init(&motor2);
 
   NEC_Read(&nec);
+
+  MOTOR_SetSpeed(&motor1, 1, 20);
+  MOTOR_SetSpeed(&motor2, 0, 20);
+
+  set_ang2(900, 0);
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	 //set_ang(100,0);
     /* USER CODE END WHILE */
-    MX_USB_HOST_Process();
 
     /* USER CODE BEGIN 3 */
+	  HAL_GPIO_TogglePin(LD3_GPIO_Port, LD3_Pin);
+	  HAL_Delay(200);
+
     if (signal_flag == 1){
     	signal_flag = 0;
     	switch(signal_code){
     	case 9:
-    		if(speed < 100){
-    			speed +=1;
+    		if(speed < 80){
+    			speed +=10;
     			motor_flag = 1;
     		}
     		break;
     	case 21:
     		if (speed > 0){
-    			speed -= 1;
+    			speed -= 10;
     			motor_flag = 1;
     		}
     		break;
     	case 64:
-    		if (direction > 0){
-    			direction -= 10;
+    		if (direction < 1200){
+    			direction += 100;
     			steering_flag = 1;
     		}
     		break;
     	case 67:
-    		if (direction < 1800){
-    			direction +=10;
+    		if (direction > 600){
+    			direction -=100;
     			steering_flag = 1;
     		}
     		break;
     	case 68:
-    		if (position < 1800){
-    			position += 10;
-    			arm_flag = 1;
-    		}
+    		set_ang1(1700, 0);
     		break;
     	case 7:
-    		if (position > 0){
-    			position -= 10;
-    			arm_flag = 1;
-    		}
+    		set_ang1(600, 0);
     		break;
+    	default:
+    		HAL_GPIO_TogglePin(LD3_GPIO_Port, LD3_Pin);
+    		HAL_GPIO_TogglePin(LD4_GPIO_Port, LD4_Pin);
+    		HAL_GPIO_TogglePin(LD5_GPIO_Port, LD5_Pin);
+    		HAL_GPIO_TogglePin(LD6_GPIO_Port, LD6_Pin);
     	}
     }
     if (motor_flag){
     	motor_flag = 0;
     	MOTOR_SetSpeed(&motor1, 1, speed);
-    	MOTOR_SetSpeed(&motor2, 1, speed);
+    	MOTOR_SetSpeed(&motor2, 0, speed);
     }
     if (steering_flag){
     	steering_flag = 0;
-    }
-    if (arm_flag){
-    	arm_flag = 0;
+    	set_ang2(direction, 0);
     }
   }
+
   /* USER CODE END 3 */
 }
 
