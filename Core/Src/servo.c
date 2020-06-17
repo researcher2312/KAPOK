@@ -13,6 +13,7 @@
  * ang - kat obrotu walu serwomechanizmu
  * mode - tryb obrotu zgodnie/przeciwnie do wskazowek zegara
  */
+//Najlepiej skrajne położenia = angle = {500 - 1700}
 void set_ang1(uint16_t ang, uint8_t mode)
 {
 	uint16_t val;
@@ -26,6 +27,7 @@ void set_ang1(uint16_t ang, uint8_t mode)
 		ang = ANGLE_MIN;
 	}
 
+	
 	if(mode)
 	{
 		val = PWM_MIN + ((ang - ANGLE_MIN) * STEP) / 1000;
@@ -37,6 +39,7 @@ void set_ang1(uint16_t ang, uint8_t mode)
 
 	__HAL_TIM_SET_COMPARE(&TIM_NO, TIM_CH_NO, val);
 }
+
 
 //Domyślnie najlepiej angle = {600-1200}
 void set_ang2(uint16_t ang, uint8_t mode)
